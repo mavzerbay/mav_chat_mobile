@@ -8,7 +8,7 @@ part 'user_dto.g.dart';
 @Entity(
   tableName: "users",
 )
-class UserDto extends INetworkModel {
+class UserDto extends INetworkModel<UserDto> {
   @primaryKey
   String? userName;
   String? token;

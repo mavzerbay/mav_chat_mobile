@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mav_chat/core/database/app_database.dart';
 import 'package:mav_chat/core/database/database_manager.dart';
 import 'package:mav_chat/view/screens/welcome/view/welcome_view.dart';
 import 'package:provider/provider.dart';

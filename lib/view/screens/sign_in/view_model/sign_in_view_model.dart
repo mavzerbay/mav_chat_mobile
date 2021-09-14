@@ -79,9 +79,9 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
         password: passwordTEC.text,
       );
       try {
-        final response = await vexanaManagerComputed.networkManager.send<LoginModel, UserDto>(
+        final response = await vexanaManagerComputed.networkManager.send<UserDto, UserDto>(
           NetworkRoutes.LOGIN.rawValue,
-          parseModel: LoginModel(),
+          parseModel: UserDto(),
           method: RequestType.POST,
           data: loginModel.toJson(),
         );

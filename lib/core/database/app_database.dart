@@ -1,7 +1,10 @@
-import 'package:mav_chat/core/database/dao/user_dao.dart';
-import 'package:mav_chat/view/_product/models/user_dto.dart';
+import 'dart:async';
+
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+
+import '../../view/_product/models/user_dto.dart';
+import 'dao/user_dao.dart';
 
 part 'app_database.g.dart';
 
