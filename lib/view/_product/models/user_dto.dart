@@ -1,10 +1,15 @@
+import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:vexana/vexana.dart';
 
 part 'user_dto.g.dart';
 
 @JsonSerializable()
+@Entity(
+  tableName: "users",
+)
 class UserDto extends INetworkModel {
+  @primaryKey
   String? userName;
   String? token;
   String? profilePhoto;
