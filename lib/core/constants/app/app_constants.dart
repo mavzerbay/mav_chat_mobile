@@ -5,6 +5,9 @@ class ApplicationConstants {
   static const FONT_FAMILY = "Poppins";
   static const COMPANY_NAME = "MAV";
   static const EMAIL_REGEX = '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$';
+  
+  static const String iosBaseUrl = 'https://localhost:5001'; //localhost:5001
+  static const String androidBaseUrl = 'https://10.0.2.2:5001'; //10.0.2.2:5001
 
   static const kPrimaryColor = Color(0xFF23b3bc);
   static const kSecondaryColor = Color(0xFF76f0f7);

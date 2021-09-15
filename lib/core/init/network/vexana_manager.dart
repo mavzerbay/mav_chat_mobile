@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vexana/vexana.dart';
 
 import '../../components/dialog/custom_loader_dialog.dart';
+import '../../constants/app/app_constants.dart';
 
 class VexanaManager {
   static VexanaManager? _instace;
@@ -16,14 +17,15 @@ class VexanaManager {
     return _instace!;
   }
 
-  static const String _iosBaseUrl = 'https://localhost:5001'; //localhost:5001
-  static const String _androidBaseUrl = 'https://10.0.2.2:5001'; //10.0.2.2:5001
-
   VexanaManager._init();
 
   INetworkManager networkManager = NetworkManager(
     isEnableLogger: true,
-    options: BaseOptions(baseUrl: Platform.isAndroid ? _androidBaseUrl : _iosBaseUrl),
+    options: BaseOptions(
+      baseUrl: Platform.isAndroid
+          ? ApplicationConstants.androidBaseUrl
+          : ApplicationConstants.iosBaseUrl,
+    ),
     interceptor: InterceptorsWrapper(
       onRequest: (options, handler) {
         if (!handler.isCompleted) {
