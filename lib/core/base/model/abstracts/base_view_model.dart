@@ -26,32 +26,6 @@ abstract class BaseViewModel {
 
   void init();
 
-  void showCustomDialog({
-    required String title,
-    required String acceptButtonText,
-    String? descriptions,
-    String? rejectButtonText,
-    Image? image,
-    IconData? icon,
-    Color? iconColor,
-    VoidCallback? acceptButtonFunc,
-    VoidCallback? rejectButtonFunc,
-    bool isDismissible = true,
-  }) {
-    MavDialog.showCustomDialogBox(
-      context!,
-      title: title,
-      acceptButtonText: acceptButtonText,
-      acceptButtonFunc: acceptButtonFunc,
-      rejectButtonText: rejectButtonText,
-      rejectButtonFunc: rejectButtonFunc,
-      descriptions: descriptions,
-      image: image,
-      icon: icon,
-      iconColor: iconColor,
-    );
-  }
-
   Future<void> showLoaderDialog({String? text}) async {
     MavDialog.showLoaderDialog(context!, text: text);
   }

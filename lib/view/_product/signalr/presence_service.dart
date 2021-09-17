@@ -8,7 +8,7 @@ import '../../../core/constants/app/app_constants.dart';
 
 class PresenceService {
   static PresenceService? _instance;
-  static HubConnection? _hubConnection;
+  HubConnection? hubConnection;
   static BuildContext? _context;
 
   static PresenceService? instance(BuildContext? context) {
@@ -23,11 +23,11 @@ class PresenceService {
   PresenceService._init();
 
   // ignore: close_sinks
-  BehaviorSubject<List<String>> onlineUsersSource = BehaviorSubject<List<String>>();
-  Stream<List<String>> get onlineUsers$ => onlineUsersSource.stream;
+  BehaviorSubject<List<String>> _onlineUsersSource = BehaviorSubject<List<String>>.seeded([]);
+  Stream<List<String>> get onlineUsers => _onlineUsersSource.stream;
 
   createHubConnection(String token) {
-    _hubConnection = HubConnectionBuilder()
+    hubConnection = HubConnectionBuilder()
         .withUrl(
             "$baseUrl/hubs/presence",
             HttpConnectionOptions(
@@ -36,30 +36,28 @@ class PresenceService {
         .withAutomaticReconnect()
         .build();
 
-    _hubConnection!.start()!.catchError((error) => print(error));
+    hubConnection!.start()!.catchError((error) => print(error));
 
-    _hubConnection!.on("UserIsOnline", (userName) {
-      if (!this.onlineUsersSource.hasValue) {
-        this.onlineUsersSource.add([userName] as List<String>);
+    hubConnection!.on("UserIsOnline", (userName) {
+      print("UserIsOnline " + userName![0].toString());
+      this._onlineUsersSource.add([userName[0]] as List<String>);
+    });
+
+    hubConnection!.on("UserIsOffline", (userName) {
+      print("UserIsOffline " + userName.toString());
+      _onlineUsersSource
+          .add(_onlineUsersSource.value.where((x) => x != (userName![0] as String)).toList());
+    });
+
+    hubConnection!.on("GetOnlineUsers", (userNames) {
+      List<String> userNameList = [];
+      for (var i = 0; i < userNames![0].length; i++) {
+        userNameList.add(userNames[0][i]);
       }
-      this.onlineUsers$.listen((userNames) {
-        userNames.add(userName as String);
-        this.onlineUsersSource.add(userNames);
-      });
+      this._onlineUsersSource.add(userNameList);
     });
 
-    _hubConnection!.on("UserIsOffline", (userName) {
-      this.onlineUsers$.listen((userNames) {
-        this.onlineUsersSource.add(userNames.where((x) => x != (userName as String)).toList());
-      });
-    });
-
-    _hubConnection!.on("GetOnlineUsers", (userNames) {
-      print(userNames);
-      this.onlineUsersSource.add(userNames as List<String>);
-    });
-
-    _hubConnection!.on(
+    hubConnection!.on(
         "NewMessageReceived",
         ([userName, nameSurname]) => {
               ScaffoldMessenger.of(_context!).showSnackBar(SnackBar(
@@ -83,8 +81,8 @@ class PresenceService {
   }
 
   stopHubConnection() {
-    if (_hubConnection != null) {
-      _hubConnection!.stop();
+    if (hubConnection != null) {
+      hubConnection!.stop();
     }
   }
 }

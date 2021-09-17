@@ -24,15 +24,38 @@ mixin _$ChatsViewModel on _ChatsViewModelBase, Store {
     });
   }
 
+  final _$isOnlineAtom = Atom(name: '_ChatsViewModelBase.isOnline');
+
+  @override
+  bool get isOnline {
+    _$isOnlineAtom.reportRead();
+    return super.isOnline;
+  }
+
+  @override
+  set isOnline(bool value) {
+    _$isOnlineAtom.reportWrite(value, super.isOnline, () {
+      super.isOnline = value;
+    });
+  }
+
+  final _$changeIndexAsyncAction =
+      AsyncAction('_ChatsViewModelBase.changeIndex');
+
+  @override
+  Future changeIndex(int index) {
+    return _$changeIndexAsyncAction.run(() => super.changeIndex(index));
+  }
+
   final _$_ChatsViewModelBaseActionController =
       ActionController(name: '_ChatsViewModelBase');
 
   @override
-  dynamic changeIndex(int index) {
+  dynamic currentUserIsOnline(List<String> userNameList) {
     final _$actionInfo = _$_ChatsViewModelBaseActionController.startAction(
-        name: '_ChatsViewModelBase.changeIndex');
+        name: '_ChatsViewModelBase.currentUserIsOnline');
     try {
-      return super.changeIndex(index);
+      return super.currentUserIsOnline(userNameList);
     } finally {
       _$_ChatsViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -41,7 +64,8 @@ mixin _$ChatsViewModel on _ChatsViewModelBase, Store {
   @override
   String toString() {
     return '''
-selectedIndex: ${selectedIndex}
+selectedIndex: ${selectedIndex},
+isOnline: ${isOnline}
     ''';
   }
 }

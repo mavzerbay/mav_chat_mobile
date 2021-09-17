@@ -34,7 +34,13 @@ class CoreDio with DioMixin implements Dio, ICoreDio {
       Map<String, dynamic>? queryParameters,
       void Function(int, int)? onReceiveProgress}) async {
     try {
-      final response = await request(path, data: data, options: Options(method: type.rawValue));
+      final response = await request(
+        path,
+        data: data,
+        options: Options(method: type.rawValue, headers: options.headers),
+        queryParameters: queryParameters,
+        onReceiveProgress: onReceiveProgress,
+      );
       switch (response.statusCode) {
         case HttpStatus.ok:
         case HttpStatus.accepted:
@@ -45,9 +51,8 @@ class CoreDio with DioMixin implements Dio, ICoreDio {
       }
     } on DioError catch (e) {
       return ResponseModel(error: BaseError(e.message, description: e.error));
-    }
-    catch(e){
-          return ResponseModel(error: BaseError(e.toString(),closeLoader: true));
+    } catch (e) {
+      return ResponseModel(error: BaseError(e.toString(), closeLoader: true));
     }
   }
 }

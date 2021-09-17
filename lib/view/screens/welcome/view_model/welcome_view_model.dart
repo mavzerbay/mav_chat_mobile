@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/constants/enums/locale_preferences_keys_enum.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/abstracts/base_view_model.dart';
@@ -13,10 +14,8 @@ abstract class _WelcomeViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    // if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty) {
-    //   navigation.navigateToPage(path: NavigationConstants.CHATS);
-    // } else if (!localeManager.getBoolValue(LocalePreferencesKeys.IS_FIRST_APP)) {
-    //   navigation.navigateToPageClear(path: NavigationConstants.SIGN_IN);
-    // }
+    if (!localeManager.getBoolValue(LocalePreferencesKeys.IS_FIRST_APP)) {
+      localeManager.setBoolValue(LocalePreferencesKeys.IS_FIRST_APP, true);
+    }
   }
 }

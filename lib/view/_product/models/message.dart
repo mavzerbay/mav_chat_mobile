@@ -1,36 +1,36 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
 
 part 'message.g.dart';
 
 @JsonSerializable()
-class Message extends INetworkModel {
-  int id;
-  int senderId;
-  String senderUserName;
-  List<int> senderPhoto;
-  int receiverId;
-  String receiverUserName;
-  List<int> receiverPhoto;
-  String messageText;
+class Message extends BaseModel<Message> {
+  int? id;
+  int? senderId;
+  String? senderUserName;
+  List<int>? senderPhoto;
+  int? receiverId;
+  String? receiverUserName;
+  List<int>? receiverPhoto;
+  String? messageText;
   DateTime? readDate;
-  DateTime sendDate;
+  DateTime? sendDate;
 
   Message({
-    required this.id,
-    required this.senderId,
-    required this.senderUserName,
-    required this.senderPhoto,
-    required this.receiverId,
-    required this.receiverUserName,
-    required this.receiverPhoto,
-    required this.messageText,
+    this.id,
+    this.senderId,
+    this.senderUserName,
+    this.senderPhoto,
+    this.receiverId,
+    this.receiverUserName,
+    this.receiverPhoto,
+    this.messageText,
     this.readDate,
-    required this.sendDate,
+    this.sendDate,
   });
 
   @override
-  fromJson(Map<String, dynamic> json) {
+  Message fromJson(Map<String, dynamic> json) {
     return _$MessageFromJson(json);
   }
 

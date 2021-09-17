@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
 
 part 'connection.g.dart';
 
 @JsonSerializable()
-class Connection extends INetworkModel {
+class Connection extends BaseModel<Connection> {
   String connectionId;
   String userName;
 

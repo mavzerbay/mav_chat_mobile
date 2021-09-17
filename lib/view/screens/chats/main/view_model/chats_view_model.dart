@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/constants/navigation/navigation_constants.dart';
+import 'package:mav_chat/core/utils/jwt_utils.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../../core/base/model/abstracts/base_view_model.dart';
@@ -16,20 +18,37 @@ abstract class _ChatsViewModelBase with Store, BaseViewModel {
 
   PresenceService? presenceService;
 
+  String currentUserName = "";
+
   @override
   void init() {
-    if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "") {      
+    if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "") {
       presenceService = PresenceService.instance(context);
       presenceService!
           .createHubConnection(LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN));
+      currentUserName = JwtUtils.parseJwt(
+          localeManager.getStringValue(LocalePreferencesKeys.TOKEN))['unique_name'];
     }
   }
 
   @observable
   int selectedIndex = 0;
 
+  @observable
+  bool isOnline = false;
+
   @action
-  changeIndex(int index) {
+  changeIndex(int index) async {
     selectedIndex = index;
+    if (index == 3) {
+      await LocaleManager.instance.removeValue(LocalePreferencesKeys.TOKEN);
+      presenceService!.stopHubConnection();
+      await navigation.navigateToPageClear(path: NavigationConstants.SIGN_IN);
+    }
+  }
+
+  @action
+  currentUserIsOnline(List<String> userNameList) {
+    isOnline = userNameList.any((x) => x == currentUserName);
   }
 }

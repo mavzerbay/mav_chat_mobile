@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/constants/enums/locale_preferences_keys_enum.dart';
 import 'package:mav_chat/core/database/database_manager.dart';
+import 'package:mav_chat/view/screens/sign_in/view/sign_in_view.dart';
 import 'package:mav_chat/view/screens/welcome/view/welcome_view.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +61,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: WelcomeView(),
+      home: LocaleManager.instance.getBoolValue(LocalePreferencesKeys.IS_FIRST_APP)
+          ? SignInView()
+          : WelcomeView(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
     );

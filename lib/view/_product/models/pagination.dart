@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
 
 part 'pagination.g.dart';
 
 @JsonSerializable()
-class Pagination extends INetworkModel<Pagination> {
+class Pagination extends BaseModel<Pagination> {
   int currentPage;
   int itemsPerPage;
   int? totalItems;

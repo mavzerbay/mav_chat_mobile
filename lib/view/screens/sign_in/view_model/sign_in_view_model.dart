@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/components/dialog/mav_dialog.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/abstracts/base_view_model.dart';
@@ -23,8 +24,9 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) {
     this.context = context;
     networkManager = NetworkManager()
-        .addLoadersOnRequest(true)
+        .addLoadersOnRequest()
         .addBuildContext(context)
+        .addNavigationService(navigation)
         .build();
   }
 
@@ -99,11 +101,13 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
           if ((response.error as BaseError).closeLoader != null &&
               (response.error as BaseError).closeLoader!)
             Navigator.of(context!, rootNavigator: true).pop();
-            
-          showCustomDialog(
-              title: (response.error! as BaseError).error,
-              descriptions: (response.error! as BaseError).description,
-              acceptButtonText: LocaleKeys.common_okey.locale);
+
+          MavDialog.showCustomDialogBox(
+            context!,
+            title: (response.error! as BaseError).error,
+            descriptions: (response.error! as BaseError).description,
+            acceptButtonText: LocaleKeys.common_okey.locale,
+          );
         } else if (response.data != null) {
           await localeManager.setStringValue(LocalePreferencesKeys.TOKEN, response.data!.token!);
 
@@ -113,7 +117,8 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
         print(e);
       }
     } else {
-      showCustomDialog(
+      MavDialog.showCustomDialogBox(
+        context!,
         title: LocaleKeys.form_unvalidForm.locale,
         acceptButtonText: LocaleKeys.common_okey.locale,
         isDismissible: false,

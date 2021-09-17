@@ -23,7 +23,7 @@ List chatsData = [
   ),
   Chat(
     name: "Esther Howard",
-    userName: "EstherHoward",
+    userName: "mavzerbay@gmail.com",
     lastMessage: "Hello Abdullah! I am...",
     image: "assets/images/user_2.png",
     time: "8m ago",
@@ -39,7 +39,7 @@ List chatsData = [
   ),
   Chat(
     name: "Jacob Jones",
-    userName: "JacobJones",
+    userName: "mavzerbay@gmail.com",
     lastMessage: "You’re welcome :)",
     image: "assets/images/user_4.png",
     time: "5d ago",

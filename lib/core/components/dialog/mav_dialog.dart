@@ -4,13 +4,19 @@ import 'custom_dialogs/custom_dialog_box.dart';
 import 'custom_dialogs/custom_loader_dialog.dart';
 
 class MavDialog {
+  static bool dialogIsOpen = false;
+
   static showLoaderDialog(
-    BuildContext context, {
+    BuildContext _context, {
     bool barrierDismissible = false,
     String? text,
   }) {
+    if (dialogIsOpen) {
+      Navigator.of(_context).pop();
+      dialogIsOpen = true;
+    }
     showDialog(
-      context: context,
+      context: _context,
       barrierDismissible: barrierDismissible,
       builder: (context) {
         return CustomLoaderDialog(
@@ -21,7 +27,7 @@ class MavDialog {
   }
 
   static showCustomDialogBox(
-    BuildContext context, {
+    BuildContext _context, {
     required String title,
     required String acceptButtonText,
     String? descriptions,
@@ -33,9 +39,13 @@ class MavDialog {
     VoidCallback? rejectButtonFunc,
     bool isDismissible = true,
   }) {
+    if (dialogIsOpen) {
+      Navigator.of(_context).pop();
+      dialogIsOpen = true;
+    }
     showDialog(
       barrierDismissible: isDismissible,
-      context: context,
+      context: _context,
       builder: (context) {
         return CustomDialogBox(
           title: title,

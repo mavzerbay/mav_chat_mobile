@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../../components/dialog/mav_dialog.dart';
 import '../../constants/app/app_constants.dart';
 import '../../constants/enums/locale_preferences_keys_enum.dart';
 import '../cache/locale_manager.dart';
+import '../navigation/navigation_service.dart';
 import 'core_dio.dart';
 import 'core_dio_interface.dart';
 import 'models/status_model.dart';
@@ -24,6 +24,7 @@ class NetworkManager implements INetworkManager<ICoreDio> {
   int? _timeout;
   BuildContext? _context;
   InterceptorsWrapper? _wrapper;
+  NavigationService? _navigationService;
 
   @override
   INetworkManager<ICoreDio> addBaseUrl(String baseUrl) {
@@ -58,28 +59,73 @@ class NetworkManager implements INetworkManager<ICoreDio> {
   bool _isLoaderOpen = false;
 
   @override
-  INetworkManager<ICoreDio> addLoadersOnRequest(bool withLogger) {
+  INetworkManager<ICoreDio> addLoadersOnRequest() {
     _wrapper = InterceptorsWrapper(
-      onRequest: (options, handler) {
-        if (!handler.isCompleted) {
-          _isLoaderOpen = true;
-          MavDialog.showLoaderDialog(_context!);
-        } else if (handler.isCompleted && _isLoaderOpen) {
-          Navigator.of(_context!, rootNavigator: true).pop();
-        }
+      onRequest: (options, handler) async {
+        _isLoaderOpen = true;
+        MavDialog.showLoaderDialog(_context!);
+        handler.future.whenComplete(() {
+          print("request completed");
+          print("request 1" + _isLoaderOpen.toString());
+          if (_isLoaderOpen) {
+            if (_navigationService != null)
+              _navigationService!.closeDialog();
+            else
+              Navigator.of(_context!).maybePop();
 
-        if (withLogger) {
-          Logger().i(options);
+            _isLoaderOpen = false;
+          }
+          print("request 2" + _isLoaderOpen.toString());
+        });
+
+        if (LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty) {
+          options.headers[HttpHeaders.authorizationHeader] =
+              'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty}';
         }
 
         handler.next(options);
       },
+      onResponse: (e, handler) {
+        handler.future.whenComplete(() {
+          print("response completed");
+          print("response 1" + _isLoaderOpen.toString());
+          if (_isLoaderOpen) {
+            if (_navigationService != null)
+              _navigationService!.closeDialog();
+            else
+              Navigator.of(_context!).maybePop();
+
+            _isLoaderOpen = false;
+          }
+          print("response 2" + _isLoaderOpen.toString());
+        });
+
+        handler.next(e);
+      },
       onError: (e, handler) {
-        if (_isLoaderOpen) Navigator.of(_context!, rootNavigator: true).pop();
+        handler.future.whenComplete(() {
+          print("error completed");
+          print("error 1" + _isLoaderOpen.toString());
+          if (_isLoaderOpen) {
+            if (_navigationService != null)
+              _navigationService!.closeDialog();
+            else
+              Navigator.of(_context!).maybePop();
+
+            _isLoaderOpen = false;
+          }
+          print("error 2" + _isLoaderOpen.toString());
+        });
 
         handler.next(e);
       },
     );
+    return this;
+  }
+
+  @override
+  INetworkManager<ICoreDio> addNavigationService(NavigationService navigationService) {
+    _navigationService = navigationService;
     return this;
   }
 
@@ -89,10 +135,10 @@ class NetworkManager implements INetworkManager<ICoreDio> {
       BaseOptions(
         baseUrl: _baseUrl,
         headers: _baseHeader ??
-            Map.fromEntries([
-              MapEntry(HttpHeaders.authorizationHeader,
-                  'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN)}'),
-            ]),
+            {
+              HttpHeaders.authorizationHeader:
+                  'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN)}'
+            },
         connectTimeout: _timeout,
         validateStatus: (status) {
           if (status != null) {

@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
 
 part 'login_model.g.dart';
 
 @JsonSerializable()
-class LoginModel extends INetworkModel {
+class LoginModel extends BaseModel<LoginModel> {
   String? userName;
   String? password;
   
@@ -14,7 +14,7 @@ class LoginModel extends INetworkModel {
   });
 
   @override
-  fromJson(Map<String, dynamic> json) {
+  LoginModel fromJson(Map<String, dynamic> json) {
     return _$LoginModelFromJson(json);
   }
 

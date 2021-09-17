@@ -41,7 +41,7 @@ class ChatCard extends StatelessWidget {
                     backgroundImage: AssetImage(chat.image),
                   ),
                   StreamBuilder<List<String>>(
-                    stream: viewModel.presenceService!.onlineUsers$,
+                    stream: viewModel.presenceService!.onlineUsers,
                     builder: (context, snapshot) {
                       if (snapshot.hasError || !snapshot.hasData) {
                         return Container();

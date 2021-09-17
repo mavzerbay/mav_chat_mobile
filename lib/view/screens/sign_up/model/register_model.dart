@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
 
 part 'register_model.g.dart';
 
 @JsonSerializable()
-class RegisterModel extends INetworkModel {
+class RegisterModel extends BaseModel<RegisterModel> {
   String? name;
   String? surname;
   String? email;
@@ -22,7 +22,7 @@ class RegisterModel extends INetworkModel {
   });
 
   @override
-  fromJson(Map<String, dynamic> json) {
+ RegisterModel fromJson(Map<String, dynamic> json) {
     return _$RegisterModelFromJson(json);
   }
 

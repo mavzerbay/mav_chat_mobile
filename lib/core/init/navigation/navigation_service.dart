@@ -18,6 +18,17 @@ class NavigationService implements INavigationService {
 
   @override
   Future<void> navigateToPageClear({String? path, Object? data}) async {
-    await navigatorKey.currentState!.pushNamedAndRemoveUntil(path!, removeAllOldRoutes, arguments: data);
+    await navigatorKey.currentState!
+        .pushNamedAndRemoveUntil(path!, removeAllOldRoutes, arguments: data);
+  }
+
+  @override
+  Future<void> maybePop() async {
+    if (navigatorKey.currentState!.canPop()) await navigatorKey.currentState!.maybePop();
+  }
+
+  @override
+  void closeDialog() {
+    if (navigatorKey.currentState!.canPop()) navigatorKey.currentState!.pop();
   }
 }

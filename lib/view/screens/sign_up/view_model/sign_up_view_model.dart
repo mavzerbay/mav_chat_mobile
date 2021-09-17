@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/components/dialog/mav_dialog.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/base/model/abstracts/base_view_model.dart';
@@ -141,28 +142,31 @@ abstract class _SignUpViewModelBase with Store, BaseViewModel {
         );
 
         if (response.error != null) {
-          showCustomDialog(
-              title: (response.error! as BaseError).error,
-              descriptions: (response.error! as BaseError).description,
-              acceptButtonText: LocaleKeys.common_okey.locale);
+          MavDialog.showCustomDialogBox(
+            context!,
+            title: (response.error! as BaseError).error,
+            descriptions: (response.error! as BaseError).description,
+            acceptButtonText: LocaleKeys.common_okey.locale,
+          );
         } else if (response.data != null) {
-          showCustomDialog(
-              title: "Kayıt İşlemi Başarılı",
-              descriptions: "Bilgileriniz ile giriş yapabilirsiniz",
-              icon: Icons.check,
-              iconColor: Colors.green,
-              acceptButtonText: LocaleKeys.common_okey.locale,
-              isDismissible: false,
-              acceptButtonFunc: () {
-                navigation.navigateToPage(path: NavigationConstants.SIGN_IN);
-              });
+          MavDialog.showCustomDialogBox(
+            context!,
+            title: "Kayıt İşlemi Başarılı",
+            descriptions: "Bilgileriniz ile giriş yapabilirsiniz",
+            icon: Icons.check,
+            iconColor: Colors.green,
+            acceptButtonText: LocaleKeys.common_okey.locale,
+            isDismissible: false,
+            acceptButtonFunc: () => navigation.navigateToPage(path: NavigationConstants.SIGN_IN),
+          );
         }
       } catch (e) {
         print(e);
         Navigator.of(context!, rootNavigator: true).pop();
       }
     } else {
-      showCustomDialog(
+      MavDialog.showCustomDialogBox(
+        context!,
         title: LocaleKeys.form_unvalidForm.locale,
         acceptButtonText: LocaleKeys.common_okey.locale,
         isDismissible: false,
