@@ -1,7 +1,13 @@
 import 'dart:convert';
 
 class JwtUtils {
-  bool isExpired(String token) {
+  static bool isExpired(String token) {
+    final payloadMap = parseJwt(token);
+    final exp = payloadMap['exp'];
+    return DateTime.now().millisecondsSinceEpoch >= exp * 1000;
+  }
+
+  static Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
       throw Exception('invalid token');
@@ -12,11 +18,10 @@ class JwtUtils {
     if (payloadMap is! Map<String, dynamic>) {
       throw Exception('invalid payload');
     }
-    final exp = payloadMap['exp'];
-    return DateTime.now().millisecondsSinceEpoch >= exp * 1000;
+    return payloadMap;
   }
 
-  String _decodeBase64(String str) {
+  static String _decodeBase64(String str) {
     String output = str.replaceAll('-', '+').replaceAll('_', '/');
 
     switch (output.length % 4) {

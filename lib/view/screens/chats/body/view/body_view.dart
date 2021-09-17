@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../../core/base/view/base_view.dart';
 import '../../../../../core/constants/app/app_constants.dart';
@@ -6,7 +7,7 @@ import '../../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/init/lang/locale_keys.g.dart';
 import '../../../../components/filled_outline_button.dart';
-import '../components/chat_card.dart';
+import '../components/chat_card/view/chat_card.dart';
 import '../models/Chat.dart';
 import '../view_model/body_view_model.dart';
 
@@ -29,16 +30,25 @@ class Body extends StatelessWidget {
             color: ApplicationConstants.kPrimaryColor,
             child: Row(
               children: [
-                FillOutlineButton(
-                  press: () {},
-                  text: LocaleKeys.recentMessages.locale,
-                ),
+                Observer(builder: (_) {
+                  return FillOutlineButton(
+                    press: () {
+                      viewModel.changeSelectedButtonIndex(0);
+                    },
+                    text: LocaleKeys.recentMessages.locale,
+                    isFilled: viewModel.selectedButtonIndex == 0,
+                  );
+                }),
                 SizedBox(width: ApplicationConstants.kDefaultPadding),
-                FillOutlineButton(
-                  press: () {},
-                  text: LocaleKeys.active.locale,
-                  isFilled: false,
-                ),
+                Observer(builder: (_) {
+                  return FillOutlineButton(
+                    press: () {
+                      viewModel.changeSelectedButtonIndex(1);
+                    },
+                    text: LocaleKeys.active.locale,
+                    isFilled: viewModel.selectedButtonIndex == 1,
+                  );
+                }),
               ],
             ),
           ),

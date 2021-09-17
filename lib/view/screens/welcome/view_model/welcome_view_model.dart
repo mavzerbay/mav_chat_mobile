@@ -12,5 +12,11 @@ abstract class _WelcomeViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
 
   @override
-  void init() {}
+  void init() {
+    // if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty) {
+    //   navigation.navigateToPage(path: NavigationConstants.CHATS);
+    // } else if (!localeManager.getBoolValue(LocalePreferencesKeys.IS_FIRST_APP)) {
+    //   navigation.navigateToPageClear(path: NavigationConstants.SIGN_IN);
+    // }
+  }
 }

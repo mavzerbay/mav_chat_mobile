@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vexana/vexana.dart';
 
 import '../../../../core/base/model/abstracts/base_view_model.dart';
+import '../../../../core/base/model/concrete/base_error.dart';
 import '../../../../core/constants/app/app_constants.dart';
+import '../../../../core/constants/enums/http_request_enum.dart';
 import '../../../../core/constants/enums/locale_preferences_keys_enum.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/init/lang/locale_keys.g.dart';
+import '../../../../core/init/network/network_manager.dart';
 import '../../../../core/init/network/network_route_enum.dart';
 import '../../../_product/models/user_dto.dart';
 import '../model/login_model.dart';
@@ -18,7 +20,14 @@ class SignInViewModel = _SignInViewModelBase with _$SignInViewModel;
 
 abstract class _SignInViewModelBase with Store, BaseViewModel {
   @override
-  void setContext(BuildContext context) => this.context = context;
+  void setContext(BuildContext context) {
+    this.context = context;
+    networkManager = NetworkManager()
+        .addLoadersOnRequest(true)
+        .addBuildContext(context)
+        .build();
+  }
+
   @override
   void init() {
     if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "") {
@@ -79,17 +88,21 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
         password: passwordTEC.text,
       );
       try {
-        final response = await vexanaManagerComputed.networkManager.send<UserDto, UserDto>(
+        final response = await networkManager!.send<UserDto, UserDto>(
           NetworkRoutes.LOGIN.rawValue,
           parseModel: UserDto(),
-          method: RequestType.POST,
+          type: HttpTypes.POST,
           data: loginModel.toJson(),
         );
 
         if (response.error != null) {
+          if ((response.error as BaseError).closeLoader != null &&
+              (response.error as BaseError).closeLoader!)
+            Navigator.of(context!, rootNavigator: true).pop();
+            
           showCustomDialog(
-              title: response.error!.statusCode.toString(),
-              descriptions: response.error!.description,
+              title: (response.error! as BaseError).error,
+              descriptions: (response.error! as BaseError).description,
               acceptButtonText: LocaleKeys.common_okey.locale);
         } else if (response.data != null) {
           await localeManager.setStringValue(LocalePreferencesKeys.TOKEN, response.data!.token!);
@@ -98,7 +111,6 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
         }
       } catch (e) {
         print(e);
-        Navigator.of(context!, rootNavigator: true).pop();
       }
     } else {
       showCustomDialog(

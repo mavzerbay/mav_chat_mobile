@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vexana/vexana.dart';
 
 import '../../../../core/base/model/abstracts/base_view_model.dart';
+import '../../../../core/base/model/concrete/base_error.dart';
 import '../../../../core/constants/app/app_constants.dart';
+import '../../../../core/constants/enums/http_request_enum.dart';
 import '../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/init/lang/locale_keys.g.dart';
 import '../../../../core/init/network/network_route_enum.dart';
+import '../../../_product/models/user_dto.dart';
 import '../model/register_model.dart';
 
 part 'sign_up_view_model.g.dart';
@@ -131,30 +133,30 @@ abstract class _SignUpViewModelBase with Store, BaseViewModel {
         passwordConfirm: passwordConfirmTEC.text,
       );
       try {
-        final response = await vexanaManagerComputed.networkManager.send<RegisterModel, dynamic>(
-        NetworkRoutes.REGISTER.rawValue,
-        parseModel: RegisterModel(),
-        method: RequestType.POST,
-        data: registerModel.toJson(),
-      );
+        final response = await networkManager!.send<UserDto, UserDto>(
+          NetworkRoutes.REGISTER.rawValue,
+          parseModel: UserDto(),
+          type: HttpTypes.POST,
+          data: registerModel.toJson(),
+        );
 
-      if (response.error != null) {
-        showCustomDialog(
-            title: response.error!.statusCode.toString(),
-            descriptions: response.error!.description,
-            acceptButtonText: LocaleKeys.common_okey.locale);
-      } else if (response.data != null) {
-        showCustomDialog(
-            title: "Kayıt İşlemi Başarılı",
-            descriptions: "Bilgileriniz ile giriş yapabilirsiniz",
-            icon: Icons.check,
-            iconColor: Colors.green,
-            acceptButtonText: LocaleKeys.common_okey.locale,
-            isDismissible: false,
-            acceptButtonFunc: () {
-              navigation.navigateToPage(path: NavigationConstants.SIGN_IN);
-            });
-      }
+        if (response.error != null) {
+          showCustomDialog(
+              title: (response.error! as BaseError).error,
+              descriptions: (response.error! as BaseError).description,
+              acceptButtonText: LocaleKeys.common_okey.locale);
+        } else if (response.data != null) {
+          showCustomDialog(
+              title: "Kayıt İşlemi Başarılı",
+              descriptions: "Bilgileriniz ile giriş yapabilirsiniz",
+              icon: Icons.check,
+              iconColor: Colors.green,
+              acceptButtonText: LocaleKeys.common_okey.locale,
+              isDismissible: false,
+              acceptButtonFunc: () {
+                navigation.navigateToPage(path: NavigationConstants.SIGN_IN);
+              });
+        }
       } catch (e) {
         print(e);
         Navigator.of(context!, rootNavigator: true).pop();

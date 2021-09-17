@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vexana/vexana.dart';
 
-import '../../components/dialog/custom_loader_dialog.dart';
+import '../../components/dialog/mav_dialog.dart';
 import '../../constants/app/app_constants.dart';
 
 class VexanaManager {
@@ -29,13 +29,7 @@ class VexanaManager {
     interceptor: InterceptorsWrapper(
       onRequest: (options, handler) {
         if (!handler.isCompleted) {
-          showDialog(
-            context: _context!,
-            barrierDismissible: false,
-            builder: (context) {
-              return CustomLoaderDialog();
-            },
-          );
+          MavDialog.showLoaderDialog(_context!);
         } else {
           Navigator.of(_context!, rootNavigator: true).pop();
         }

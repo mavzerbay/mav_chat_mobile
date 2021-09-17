@@ -17,14 +17,12 @@ class Group extends INetworkModel<Group> {
 
   @override
   Group fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+    return _$GroupFromJson(json);
   }
 
   @override
   Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return _$GroupToJson(this);
   }
 
 }

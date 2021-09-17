@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/app/app_constants.dart';
+import '../../../constants/app/app_constants.dart';
 
 class CustomLoaderDialog extends StatelessWidget {
   const CustomLoaderDialog({Key? key, this.text}) : super(key: key);

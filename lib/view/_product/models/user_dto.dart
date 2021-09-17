@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vexana/vexana.dart';
+
+import '../../../core/base/model/abstracts/base_model.dart';
 
 part 'user_dto.g.dart';
 
@@ -8,7 +9,7 @@ part 'user_dto.g.dart';
 @Entity(
   tableName: "users",
 )
-class UserDto extends INetworkModel<UserDto> {
+class UserDto extends BaseModel<UserDto> {
   @primaryKey
   String? userName;
   String? token;
@@ -27,6 +28,7 @@ class UserDto extends INetworkModel<UserDto> {
     this.nameSurname,
     this.phoneNumber,
   });
+  
   @override
   fromJson(Map<String, dynamic> json) {
     return _$UserDtoFromJson(json);

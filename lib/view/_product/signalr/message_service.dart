@@ -2,33 +2,25 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mav_chat/core/constants/enums/http_request_enum.dart';
-import 'package:mav_chat/core/init/network/network_route_enum.dart';
-import 'package:mav_chat/core/init/network/vexana_manager.dart';
-import 'package:mav_chat/view/_product/models/group.dart';
-import 'package:mav_chat/view/_product/models/message.dart';
-import 'package:mav_chat/view/_product/models/paginated_result.dart';
-import 'package:mav_chat/view/_product/models/pagination.dart';
-import 'package:vexana/vexana.dart';
-
-import '../../../core/constants/app/app_constants.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:rxdart/subjects.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import '../../../core/constants/app/app_constants.dart';
+import '../../../core/init/network/network_route_enum.dart';
 import '../../../view/_product/models/user_dto.dart';
-import 'package:rxdart/subjects.dart';
-
-import 'package:http/http.dart' as http;
+import '../models/group.dart';
+import '../models/message.dart';
+import '../models/paginated_result.dart';
+import '../models/pagination.dart';
 
 class MessageService {
   static MessageService? _instance;
   static HubConnection? hubConnection;
   static BuildContext? context;
-  static VexanaManager? vexanaManager;
 
   static MessageService? instance(BuildContext? _context) {
     context = _context;
-    vexanaManager = VexanaManager.instance(context);
     _instance ??= MessageService._init();
     return _instance;
   }
