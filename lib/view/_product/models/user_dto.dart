@@ -18,6 +18,7 @@ class UserDto extends BaseModel<UserDto> {
   String? surname;
   String? nameSurname;
   String? phoneNumber;
+  String? lastActive;
 
   UserDto({
     this.userName,
@@ -27,12 +28,18 @@ class UserDto extends BaseModel<UserDto> {
     this.surname,
     this.nameSurname,
     this.phoneNumber,
+    this.lastActive,
   });
   
   @override
-  fromJson(Map<String, dynamic> json) {
+  UserDto fromJson(Map<String, dynamic> json) {
     return _$UserDtoFromJson(json);
   }
+
+  factory UserDto.fromJson(Map<String, dynamic> json) {
+    return _$UserDtoFromJson(json);
+  }
+  
 
   @override
   Map<String, dynamic> toJson() {

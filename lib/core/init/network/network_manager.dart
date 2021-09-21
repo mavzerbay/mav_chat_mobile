@@ -65,8 +65,6 @@ class NetworkManager implements INetworkManager<ICoreDio> {
         _isLoaderOpen = true;
         MavDialog.showLoaderDialog(_context!);
         handler.future.whenComplete(() {
-          print("request completed");
-          print("request 1" + _isLoaderOpen.toString());
           if (_isLoaderOpen) {
             if (_navigationService != null)
               _navigationService!.closeDialog();
@@ -75,20 +73,12 @@ class NetworkManager implements INetworkManager<ICoreDio> {
 
             _isLoaderOpen = false;
           }
-          print("request 2" + _isLoaderOpen.toString());
         });
-
-        if (LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty) {
-          options.headers[HttpHeaders.authorizationHeader] =
-              'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN).isNotEmpty}';
-        }
 
         handler.next(options);
       },
       onResponse: (e, handler) {
         handler.future.whenComplete(() {
-          print("response completed");
-          print("response 1" + _isLoaderOpen.toString());
           if (_isLoaderOpen) {
             if (_navigationService != null)
               _navigationService!.closeDialog();
@@ -97,15 +87,12 @@ class NetworkManager implements INetworkManager<ICoreDio> {
 
             _isLoaderOpen = false;
           }
-          print("response 2" + _isLoaderOpen.toString());
         });
 
         handler.next(e);
       },
       onError: (e, handler) {
         handler.future.whenComplete(() {
-          print("error completed");
-          print("error 1" + _isLoaderOpen.toString());
           if (_isLoaderOpen) {
             if (_navigationService != null)
               _navigationService!.closeDialog();
@@ -114,7 +101,6 @@ class NetworkManager implements INetworkManager<ICoreDio> {
 
             _isLoaderOpen = false;
           }
-          print("error 2" + _isLoaderOpen.toString());
         });
 
         handler.next(e);
@@ -137,7 +123,8 @@ class NetworkManager implements INetworkManager<ICoreDio> {
         headers: _baseHeader ??
             {
               HttpHeaders.authorizationHeader:
-                  'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN)}'
+                  'Bearer ${LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN)}',
+              HttpHeaders.acceptHeader: 'application/json'
             },
         connectTimeout: _timeout,
         validateStatus: (status) {

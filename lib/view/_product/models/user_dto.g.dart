@@ -15,6 +15,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
     surname: json['surname'] as String?,
     nameSurname: json['nameSurname'] as String?,
     phoneNumber: json['phoneNumber'] as String?,
+    lastActive: json['lastActive'] as String?,
   );
 }
 
@@ -26,4 +27,5 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'surname': instance.surname,
       'nameSurname': instance.nameSurname,
       'phoneNumber': instance.phoneNumber,
+      'lastActive': instance.lastActive,
     };

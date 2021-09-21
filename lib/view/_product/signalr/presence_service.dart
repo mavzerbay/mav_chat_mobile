@@ -39,12 +39,10 @@ class PresenceService {
     hubConnection!.start()!.catchError((error) => print(error));
 
     hubConnection!.on("UserIsOnline", (userName) {
-      print("UserIsOnline " + userName![0].toString());
-      this._onlineUsersSource.add([userName[0]] as List<String>);
+      this._onlineUsersSource.add([userName![0]] as List<String>);
     });
 
     hubConnection!.on("UserIsOffline", (userName) {
-      print("UserIsOffline " + userName.toString());
       _onlineUsersSource
           .add(_onlineUsersSource.value.where((x) => x != (userName![0] as String)).toList());
     });

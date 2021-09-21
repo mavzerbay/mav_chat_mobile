@@ -1,29 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mav_chat/view/_product/models/user_dto.dart';
 
 import '../../../../../../../core/base/view/base_view.dart';
 import '../../../../../../../core/constants/app/app_constants.dart';
 import '../../../../../../../core/extensions/context_extension.dart';
-import '../../../models/Chat.dart';
 import '../view_model/chat_card_view_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatCard extends StatelessWidget {
   const ChatCard({
     Key? key,
-    required this.chat,
+    required this.user,
     required this.press,
+    this.isOnline = false,
   }) : super(key: key);
 
-  final Chat chat;
+  final UserDto user;
   final VoidCallback press;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context) {
     return BaseView<ChatCardViewModel>(
       viewModel: ChatCardViewModel(),
       onModelReady: (model) {
-        model.userName = chat.userName;
+        model.userName = user.userName;
         model.setContext(context);
         model.init();
+        timeago.setLocaleMessages('tr', timeago.TrMessages());
       },
       onPageBuilder: (BuildContext context, ChatCardViewModel viewModel) => InkWell(
         onTap: press,
@@ -38,34 +44,24 @@ class ChatCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundImage: AssetImage(chat.image),
+                    backgroundImage: MemoryImage(Base64Decoder().convert(user.profilePhoto!)),
                   ),
-                  StreamBuilder<List<String>>(
-                    stream: viewModel.presenceService!.onlineUsers,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError || !snapshot.hasData) {
-                        return Container();
-                      }
-                      if (snapshot.hasData && snapshot.data!.any((x) => x == chat.userName)) {
-                        return Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            height: context.size18,
-                            width: context.size18,
-                            decoration: BoxDecoration(
-                              color: ApplicationConstants.kPrimaryColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: context.theme.scaffoldBackgroundColor,
-                                  width: context.size3),
-                            ),
-                          ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
+                  if (isOnline) ...[
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        height: context.size18,
+                        width: context.size18,
+                        decoration: BoxDecoration(
+                          color: ApplicationConstants.kPrimaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: context.theme.scaffoldBackgroundColor, width: context.size3),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
               Expanded(
@@ -76,14 +72,14 @@ class ChatCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        chat.name,
+                        user.name!,
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: context.size10),
                       Opacity(
                         opacity: 0.64,
                         child: Text(
-                          chat.lastMessage,
+                          "user.lastMessage!",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -94,7 +90,9 @@ class ChatCard extends StatelessWidget {
               ),
               Opacity(
                 opacity: 0.64,
-                child: Text(chat.time),
+                child: Text(
+                  timeago.format(DateTime.parse(user.lastActive!), locale: 'tr'),
+                ), //TODO: locale e göre ayarlamaları yap
               ),
             ],
           ),

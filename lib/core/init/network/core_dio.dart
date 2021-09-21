@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:mav_chat/core/constants/enums/locale_preferences_keys_enum.dart';
+import 'package:mav_chat/core/constants/navigation/navigation_constants.dart';
+import 'package:mav_chat/core/init/cache/locale_manager.dart';
+import 'package:mav_chat/core/utils/jwt_utils.dart';
 
 import '../../base/model/abstracts/base_model.dart';
 import '../../base/model/concrete/base_error.dart';
@@ -27,17 +31,30 @@ class CoreDio with DioMixin implements Dio, ICoreDio {
   }
 
   @override
-  Future<IResponseModel<R>> send<R, T extends BaseModel>(String path,
-      {required HttpTypes type,
-      required T parseModel,
-      dynamic data,
-      Map<String, dynamic>? queryParameters,
-      void Function(int, int)? onReceiveProgress}) async {
+  Future<IResponseModel<R>> send<R, T extends BaseModel>(
+    String path, {
+    required HttpTypes type,
+    required T parseModel,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    void Function(int, int)? onReceiveProgress,
+    bool withAuth = true,
+  }) async {
     try {
+      final token = LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN);
+      if (withAuth && (token.isEmpty || token == "" || JwtUtils.isExpired(token))) {
+        LocaleManager.instance.removeValue(LocalePreferencesKeys.TOKEN);
+        return ResponseModel(
+            error: BaseError(
+          "Oturum Süreniz Doldu",
+          description: "Lütfen yeniden giriş yapın",
+          navigationConstants: NavigationConstants.SIGN_IN,
+        ));
+      }
       final response = await request(
         path,
         data: data,
-        options: Options(method: type.rawValue, headers: options.headers),
+        options: Options(method: type.rawValue),
         queryParameters: queryParameters,
         onReceiveProgress: onReceiveProgress,
       );

@@ -32,9 +32,12 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "") {
-      navigation.navigateToPage(path: NavigationConstants.CHATS);
-    }
+    WidgetsBinding.instance!.addPostFrameCallback((_) => {
+          if (localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "")
+            {
+              navigation.navigateToPageClear(path: NavigationConstants.CHATS),
+            }
+        });
   }
 
   final formKey = GlobalKey<FormState>();
@@ -95,6 +98,7 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
           parseModel: UserDto(),
           type: HttpTypes.POST,
           data: loginModel.toJson(),
+          withAuth: false,
         );
 
         if (response.error != null) {

@@ -81,7 +81,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `users` (`userName` TEXT, `token` TEXT, `profilePhoto` TEXT, `name` TEXT, `surname` TEXT, `nameSurname` TEXT, `phoneNumber` TEXT, PRIMARY KEY (`userName`))');
+            'CREATE TABLE IF NOT EXISTS `users` (`userName` TEXT, `token` TEXT, `profilePhoto` TEXT, `name` TEXT, `surname` TEXT, `nameSurname` TEXT, `phoneNumber` TEXT, `lastActive` TEXT, PRIMARY KEY (`userName`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -108,7 +108,8 @@ class _$UserDao extends UserDao {
                   'name': item.name,
                   'surname': item.surname,
                   'nameSurname': item.nameSurname,
-                  'phoneNumber': item.phoneNumber
+                  'phoneNumber': item.phoneNumber,
+                  'lastActive': item.lastActive
                 },
             changeListener),
         _userDtoUpdateAdapter = UpdateAdapter(
@@ -122,7 +123,8 @@ class _$UserDao extends UserDao {
                   'name': item.name,
                   'surname': item.surname,
                   'nameSurname': item.nameSurname,
-                  'phoneNumber': item.phoneNumber
+                  'phoneNumber': item.phoneNumber,
+                  'lastActive': item.lastActive
                 },
             changeListener),
         _userDtoDeletionAdapter = DeletionAdapter(
@@ -136,7 +138,8 @@ class _$UserDao extends UserDao {
                   'name': item.name,
                   'surname': item.surname,
                   'nameSurname': item.nameSurname,
-                  'phoneNumber': item.phoneNumber
+                  'phoneNumber': item.phoneNumber,
+                  'lastActive': item.lastActive
                 },
             changeListener);
 
@@ -162,7 +165,8 @@ class _$UserDao extends UserDao {
             name: row['name'] as String?,
             surname: row['surname'] as String?,
             nameSurname: row['nameSurname'] as String?,
-            phoneNumber: row['phoneNumber'] as String?));
+            phoneNumber: row['phoneNumber'] as String?,
+            lastActive: row['lastActive'] as String?));
   }
 
   @override
@@ -175,7 +179,8 @@ class _$UserDao extends UserDao {
             name: row['name'] as String?,
             surname: row['surname'] as String?,
             nameSurname: row['nameSurname'] as String?,
-            phoneNumber: row['phoneNumber'] as String?),
+            phoneNumber: row['phoneNumber'] as String?,
+            lastActive: row['lastActive'] as String?),
         queryableName: 'users',
         isView: false);
   }

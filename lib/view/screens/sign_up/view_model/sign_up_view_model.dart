@@ -139,6 +139,7 @@ abstract class _SignUpViewModelBase with Store, BaseViewModel {
           parseModel: UserDto(),
           type: HttpTypes.POST,
           data: registerModel.toJson(),
+          withAuth: false,
         );
 
         if (response.error != null) {

@@ -1,4 +1,4 @@
-enum NetworkRoutes {REGISTER,LOGIN,MESSAGES}
+enum NetworkRoutes {REGISTER,LOGIN,MESSAGES,USERS}
 
 extension NetworkRoutesString on NetworkRoutes {
   String get rawValue {
@@ -9,6 +9,8 @@ extension NetworkRoutesString on NetworkRoutes {
         return "/Account/Login";
       case NetworkRoutes.MESSAGES:
         return "/Messages";
+      case NetworkRoutes.USERS:
+        return "/Users";
       default:
         throw Exception("Routes Not Found");
     }

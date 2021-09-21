@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mav_chat/view/_product/signalr/presence_service.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 import '../../../../../core/base/view/base_view.dart';
@@ -12,8 +14,36 @@ import '../../../../../core/init/lang/locale_keys.g.dart';
 import '../../body/view/body_view.dart';
 import '../view_model/chats_view_model.dart';
 
-class ChatsView extends StatelessWidget {
+class ChatsView extends StatefulWidget {
   const ChatsView({Key? key}) : super(key: key);
+
+  @override
+  _ChatsViewState createState() => _ChatsViewState();
+}
+
+class _ChatsViewState extends State<ChatsView> with WidgetsBindingObserver {
+  PresenceService? _presenceService;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _presenceService!.createHubConnection(
+            LocaleManager.instance.getStringValue(LocalePreferencesKeys.TOKEN));
+        break;
+      case AppLifecycleState.inactive:
+        _presenceService!.stopHubConnection();
+        break;
+      case AppLifecycleState.paused:
+        _presenceService!.stopHubConnection();
+        break;
+      case AppLifecycleState.detached:
+        _presenceService!.stopHubConnection();
+
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +52,17 @@ class ChatsView extends StatelessWidget {
       onModelReady: (model) {
         model.setContext(context);
         model.init();
+        SchedulerBinding.instance!.addPostFrameCallback((_) async {
+          if (model.localeManager.getStringValue(LocalePreferencesKeys.TOKEN) != "") {
+            model.presenceService = PresenceService.instance(context);
+            _presenceService = model.presenceService;
+          }
+        });
+
+        WidgetsBinding.instance!.addObserver(this);
+      },
+      onDispose: () {
+        WidgetsBinding.instance!.removeObserver(this);
       },
       onPageBuilder: (BuildContext context, ChatsViewModel viewModel) => Scaffold(
         appBar: buildAppBar(),

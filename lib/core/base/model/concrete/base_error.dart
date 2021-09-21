@@ -4,6 +4,11 @@ class BaseError extends IErrorModel {
   final String error;
   final String? description;
   final bool? closeLoader;
-
-  BaseError(this.error, {this.description,this.closeLoader});
+  final String? navigationConstants;
+  BaseError(
+    this.error, {
+    this.description,
+    this.closeLoader,
+    this.navigationConstants,
+  });
 }
