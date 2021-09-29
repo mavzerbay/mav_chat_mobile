@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 class BaseView<T extends Store> extends StatefulWidget {
-  final Widget Function(BuildContext context, T value) onPageBuilder; //lazım olabilir diye geriye sayfa contexti ve model döndürülür.
+  final Widget Function(BuildContext context, T value)
+      onPageBuilder; //lazım olabilir diye geriye sayfa contexti ve model döndürülür.
   final T viewModel;
   final Function(T model) onModelReady; // gelen modeli döndürmek için
-  final VoidCallback? onDispose;
+  final Function(T model)? onDispose;
 
   const BaseView({
     Key? key,
@@ -32,7 +33,7 @@ class _BaseViewState<T extends Store> extends State<BaseView<T>> {
   @override
   void dispose() {
     super.dispose();
-    if (widget.onDispose != null) widget.onDispose!();
+    if (widget.onDispose != null) widget.onDispose!(model);
   }
 
   @override

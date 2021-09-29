@@ -8,8 +8,16 @@ import '../../../../../core/extensions/string_extension.dart';
 class ChatInputField extends StatelessWidget {
   const ChatInputField({
     Key? key,
+    required this.tec,
+    required this.onChanged,
+    required this.sendButtonVisible,
+    required this.onPressedSendButton,
   }) : super(key: key);
 
+  final TextEditingController tec;
+  final VoidCallback onChanged;
+  final bool sendButtonVisible;
+  final Function()? onPressedSendButton;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,20 +61,31 @@ class ChatInputField extends StatelessWidget {
                     SizedBox(width: ApplicationConstants.kDefaultPadding / 4),
                     Expanded(
                       child: TextField(
+                        controller: tec,
+                        onChanged: (value) {
+                          onChanged();
+                        },
                         decoration: InputDecoration(
                           hintText: LocaleKeys.messageHint.locale,
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.attach_file,
-                      color: context.textTheme.bodyText1!.color!.withOpacity(0.64),
-                    ),
-                    Icon(
-                      Icons.camera_alt_outlined,
-                      color: context.textTheme.bodyText1!.color!.withOpacity(0.64),
-                    ),
+                    if (!sendButtonVisible) ...[
+                      Icon(
+                        Icons.attach_file,
+                        color: context.textTheme.bodyText1!.color!.withOpacity(0.64),
+                      ),
+                      Icon(
+                        Icons.camera_alt_outlined,
+                        color: context.textTheme.bodyText1!.color!.withOpacity(0.64),
+                      ),
+                    ] else ...[
+                      IconButton(
+                        icon: Icon(Icons.send, color: ApplicationConstants.kPrimaryColor),
+                        onPressed: onPressedSendButton,
+                      ),
+                    ]
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mav_chat/view/_product/models/user_dto.dart';
 
 import '../../../view/screens/chats/main/view/chats_view.dart';
 import '../../../view/screens/messages/main/view/messages_view.dart';
@@ -48,9 +49,9 @@ class NavigationRoute {
         if (args.arguments != null &&
             args.arguments is NavigationData &&
             (args.arguments as NavigationData).routeWithAnimation)
-          return animatedNavigate(MessagesView());
+          return animatedNavigate(MessagesView(userDto: (args.arguments as NavigationData).data as UserDto,));
         else
-          return normalNavigate(MessagesView());
+          return normalNavigate(MessagesView(userDto: (args.arguments as NavigationData).data as UserDto));
       default:
         return MaterialPageRoute(
           builder: (context) => NotFoundNavigationWidget(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -61,7 +63,7 @@ class _ChatsViewState extends State<ChatsView> with WidgetsBindingObserver {
 
         WidgetsBinding.instance!.addObserver(this);
       },
-      onDispose: () {
+      onDispose: (model) {
         WidgetsBinding.instance!.removeObserver(this);
       },
       onPageBuilder: (BuildContext context, ChatsViewModel viewModel) => Scaffold(
@@ -124,7 +126,7 @@ class _ChatsViewState extends State<ChatsView> with WidgetsBindingObserver {
                     children: [
                       CircleAvatar(
                         radius: context.size20,
-                        backgroundImage: AssetImage("assets/images/user_2.png"),
+                        backgroundImage: MemoryImage(Base64Decoder().convert(viewModel.localeManager.getStringValue(LocalePreferencesKeys.CURRENT_USER_PHOTO))),
                       ),
                       if (viewModel.isOnline) ...[
                         Positioned(

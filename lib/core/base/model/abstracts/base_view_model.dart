@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mav_chat/core/extensions/string_extension.dart';
+import 'package:mav_chat/core/init/lang/locale_keys.g.dart';
 
 import '../../../components/dialog/mav_dialog.dart';
 import '../../../constants/enums/locale_preferences_keys_enum.dart';
@@ -40,8 +42,8 @@ abstract class BaseViewModel {
     if (token.isNotEmpty && !JwtUtils.isExpired(token)) {
       LocaleManager.instance.removeValue(LocalePreferencesKeys.TOKEN);
       MavDialog.showCustomDialogBox(context!,
-          title: "Oturum Süreniz Doldu",
-          acceptButtonText: "Tamam",
+          title: LocaleKeys.authorization_expirationEnd.locale,
+          acceptButtonText: LocaleKeys.common_okey.locale,
           acceptButtonFunc: () async =>
              await navigation.navigateToPageClear(path: NavigationConstants.SIGN_IN));
     }

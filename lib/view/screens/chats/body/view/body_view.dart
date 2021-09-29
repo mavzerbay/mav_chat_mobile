@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mav_chat/core/init/navigation/navigation_route.dart';
 import 'package:mav_chat/view/_product/models/user_dto.dart';
 
 import '../../../../../core/base/view/base_view.dart';
@@ -85,8 +86,11 @@ class Body extends StatelessWidget {
                             return ChatCard(
                               user: snapshot.data![index],
                               isOnline: isOnline,
-                              press: () => viewModel.navigation
-                                  .navigateToPage(path: NavigationConstants.MESSAGES),
+                              press: () => viewModel.navigation.navigateToPage(
+                                path: NavigationConstants.MESSAGES,
+                                data: NavigationData(
+                                    data: snapshot.data![index], routeWithAnimation: true),
+                              ),
                             );
                           },
                         );

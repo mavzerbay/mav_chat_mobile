@@ -114,6 +114,7 @@ abstract class _SignInViewModelBase with Store, BaseViewModel {
           );
         } else if (response.data != null) {
           await localeManager.setStringValue(LocalePreferencesKeys.TOKEN, response.data!.token!);
+          await localeManager.setStringValue(LocalePreferencesKeys.CURRENT_USER_PHOTO, response.data!.profilePhoto!);
 
           navigation.navigateToPage(path: NavigationConstants.CHATS);
         }

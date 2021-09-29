@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mav_chat/core/constants/app/app_constants.dart';
 import 'package:mav_chat/core/extensions/context_extension.dart';
-import 'package:mav_chat/view/screens/chats/body/models/ChatMessage.dart';
+import 'package:mav_chat/view/_product/models/message.dart';
 
 class VideoMessage extends StatelessWidget {
   const VideoMessage({
@@ -9,7 +11,7 @@ class VideoMessage extends StatelessWidget {
     required this.message,
   }) : super(key: key);
 
-  final ChatMessage message;
+  final Message message;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,7 +23,7 @@ class VideoMessage extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset("assets/images/Video Place Here.png"),
+              child: Image.memory((Base64Decoder().convert(message.file!))),
             ),
             Container(
               height: context.size26,
