@@ -50,13 +50,15 @@ abstract class _BodyViewModelBase with Store, BaseViewModel {
   }
 
   @override
-  void init() {}
+  void init() {
+  }
 
   void dispose() {
     //messageService!.stopHubConnection();
   }
 
   TextEditingController chatTEC = new TextEditingController();
+  ScrollController messageScrollController = ScrollController();
 
   @observable
   bool showSendButton = false;

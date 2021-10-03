@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:mav_chat/core/base/model/abstracts/base_model.dart';
-import 'package:mav_chat/view/_product/models/user_dto.dart';
 
 part 'message.g.dart';
 
@@ -9,11 +8,9 @@ part 'message.g.dart';
 class Message extends BaseModel<Message> {
   int? id;
   int? senderId;
-  UserDto? sender;
-  String? senderPhoto;
+  String? senderUserName;
   int? receiverId;
-  UserDto? receiver;
-  String? receiverPhoto;
+  String? receiverUserName;
   String? messageText;
   DateTime? readDate;
   DateTime? sendDate;
@@ -22,11 +19,9 @@ class Message extends BaseModel<Message> {
   Message({
     this.id,
     this.senderId,
-    this.sender,
-    this.senderPhoto,
+    this.senderUserName,
     this.receiverId,
-    this.receiver,
-    this.receiverPhoto,
+    this.receiverUserName,
     this.messageText,
     this.readDate,
     this.sendDate,

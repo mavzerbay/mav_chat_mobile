@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mav_chat/view/_product/models/message.dart';
 
@@ -42,14 +40,7 @@ class MessageCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: ApplicationConstants.kDefaultPadding),
       child: Row(
         mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-          if (!isSender) ...[
-            CircleAvatar(
-              radius: 12,
-              backgroundImage: MemoryImage(Base64Decoder().convert(message.sender!.profilePhoto!)),
-            ),
-            SizedBox(width: ApplicationConstants.kDefaultPadding / 2),
-          ],
+        children: [          
           messageContaint(message),
           if (isSender) MessageStatusDot(readDate: message.readDate)
         ],

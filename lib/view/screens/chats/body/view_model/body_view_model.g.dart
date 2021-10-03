@@ -9,18 +9,18 @@ part of 'body_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$BodyViewModel on _BodyViewModelBase, Store {
-  final _$messageListAtom = Atom(name: '_BodyViewModelBase.messageList');
+  final _$userListAtom = Atom(name: '_BodyViewModelBase.userList');
 
   @override
-  List<Message> get messageList {
-    _$messageListAtom.reportRead();
-    return super.messageList;
+  List<UserDto> get userList {
+    _$userListAtom.reportRead();
+    return super.userList;
   }
 
   @override
-  set messageList(List<Message> value) {
-    _$messageListAtom.reportWrite(value, super.messageList, () {
-      super.messageList = value;
+  set userList(List<UserDto> value) {
+    _$userListAtom.reportWrite(value, super.userList, () {
+      super.userList = value;
     });
   }
 
@@ -57,7 +57,7 @@ mixin _$BodyViewModel on _BodyViewModelBase, Store {
   @override
   String toString() {
     return '''
-messageList: ${messageList},
+userList: ${userList},
 selectedButtonIndex: ${selectedButtonIndex}
     ''';
   }

@@ -35,6 +35,7 @@ abstract class  LocaleKeys {
   static const common_okey = 'common.okey';
   static const common = 'common';
   static const authorization_expirationEnd = 'authorization.expirationEnd';
+  static const authorization_online = 'authorization.online';
   static const authorization = 'authorization';
 
 }

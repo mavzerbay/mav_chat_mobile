@@ -39,7 +39,7 @@ class PresenceService {
     hubConnection!.start()!.catchError((error) => print(error));
 
     hubConnection!.on("UserIsOnline", (userName) {
-      this._onlineUsersSource.add([userName![0]] as List<String>);
+      this._onlineUsersSource.add([userName![0] as String]);
     });
 
     hubConnection!.on("UserIsOffline", (userName) {
@@ -55,27 +55,26 @@ class PresenceService {
       this._onlineUsersSource.add(userNameList);
     });
 
-    hubConnection!.on(
-        "NewMessageReceived",
-        ([userName, nameSurname]) => {
-              ScaffoldMessenger.of(_context!).showSnackBar(SnackBar(
-                content: Container(
-                  color: ApplicationConstants.kPrimaryColor,
-                  child: Center(
-                    child: Text(
-                      '$nameSurname Mesaj Gönderdi !',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                duration: const Duration(seconds: 5),
-                action: SnackBarAction(
-                    label: 'Cevap Yaz',
-                    onPressed: () {
-                      Navigator.pushNamed(_context!, '/user', arguments: userName);
-                    }),
-              )),
-            });
+    hubConnection!.on("NewMessageReceived", ([userName, nameSurname]) {
+      print([userName, nameSurname]);
+      ScaffoldMessenger.of(_context!).showSnackBar(SnackBar(
+        content: Container(
+          color: ApplicationConstants.kPrimaryColor,
+          child: Center(
+            child: Text(
+              '$nameSurname Mesaj Gönderdi !',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+            label: 'Cevap Yaz',
+            onPressed: () {
+              Navigator.pushNamed(_context!, '/user', arguments: userName);
+            }),
+      ));
+    });
   }
 
   stopHubConnection() {

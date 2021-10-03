@@ -10,15 +10,9 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
   return Message(
     id: json['id'] as int?,
     senderId: json['senderId'] as int?,
-    sender: json['sender'] == null
-        ? null
-        : UserDto.fromJson(json['sender'] as Map<String, dynamic>),
-    senderPhoto: json['senderPhoto'] as String?,
+    senderUserName: json['senderUserName'] as String?,
     receiverId: json['receiverId'] as int?,
-    receiver: json['receiver'] == null
-        ? null
-        : UserDto.fromJson(json['receiver'] as Map<String, dynamic>),
-    receiverPhoto: json['receiverPhoto'] as String?,
+    receiverUserName: json['receiverUserName'] as String?,
     messageText: json['messageText'] as String?,
     readDate: json['readDate'] == null
         ? null
@@ -33,11 +27,9 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'id': instance.id,
       'senderId': instance.senderId,
-      'sender': instance.sender,
-      'senderPhoto': instance.senderPhoto,
+      'senderUserName': instance.senderUserName,
       'receiverId': instance.receiverId,
-      'receiver': instance.receiver,
-      'receiverPhoto': instance.receiverPhoto,
+      'receiverUserName': instance.receiverUserName,
       'messageText': instance.messageText,
       'readDate': instance.readDate?.toIso8601String(),
       'sendDate': instance.sendDate?.toIso8601String(),

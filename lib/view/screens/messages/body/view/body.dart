@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mav_chat/view/_product/models/user_dto.dart';
 
@@ -47,13 +48,16 @@ class Body extends StatelessWidget {
                             AlwaysStoppedAnimation<Color>(ApplicationConstants.kPrimaryColor),
                       );
                     }
+
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
+                      controller: viewModel.messageScrollController,
+                      shrinkWrap: true,
+                      reverse: true,
                       itemBuilder: (context, index) {
                         bool isSender = false;
-                        print(viewModel.currentUserName);
                         if (viewModel.currentUserName != "" &&
-                            snapshot.data![index].sender!.userName == viewModel.currentUserName) {
+                            snapshot.data![index].senderUserName == viewModel.currentUserName) {
                           isSender = true;
                         }
                         return MessageCard(message: snapshot.data![index], isSender: isSender);
